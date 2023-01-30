@@ -75,6 +75,8 @@ class Command {
 
   static List<int> zeroTrimCmd = [0x2B, 0x0];
 
+
+
   static List<int> lcluclCmd = [
     0x23,
     0x9,
@@ -89,6 +91,9 @@ class Command {
     0x00,
     0xB2
   ];
+
+  static List<int> unitCMDFirst = [0x2C, 0x1];
+
   static List<int> lcluclCmd1 = [0x23, 0x9];
   static List<int> lcluclCmd2 = [0xB2];
 

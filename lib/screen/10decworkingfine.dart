@@ -129,6 +129,7 @@ class _ChatPage extends State<ChatPage> {
   List<int> valueEnteredOUTERHIGH = [];
   List<int> processint = [];
   List<int> tagFinalCmd = [];
+  List<int> unitFinalCmd = [];
   List<int> loopFinalCmd = [];
   List<int> trimming = [];
   List<int> addressCMD = [];
@@ -187,6 +188,8 @@ class _ChatPage extends State<ChatPage> {
   List<int> macadd2 = [];
   List<int> tagCMDFirst = [];
   List<int> tagCMDSecond = [];
+  List<int> unitCMDFirst = [];
+  List<int> unitCMDSecond = [];
   List<int> loopCMDFirst = [];
   List<int> loopCMDSecond = [];
   List<int> despritionTagCMD = [];
@@ -201,12 +204,14 @@ class _ChatPage extends State<ChatPage> {
   List<int> macaddress = [];
   List<int> cmdforlclucl = [];
   List<int> lcluclCmd1 = [];
+  List<int> unitCmd = [];
   List<int> lcluclCmd2 = [];
   List<int> outerLowCMDModification = [];
   List<int> outerLowCMDModificationSecond = [];
   int manufactureNumber = 1;
   List<int> automaticControl = [];
   List<int> temptagCode = [];
+  List<int> tempunitCode = [];
   List<int> preamble = [
     0xFF,
     0xFF,
@@ -257,6 +262,7 @@ class _ChatPage extends State<ChatPage> {
     currentCMDTemp = preamble + currentCMD + currentCMDChecksum + lastValue;
     tagCMDFirst = [0x82] + macaddress + Command.tagCMDFirst;
     tagCMDSecond = Command.tagCMDSecond;
+    unitCMDFirst = [0x82] + macaddress + Command.unitCMDFirst;
     loopCMDFirst = [0x82] + macaddress + Command.loopFirst;
     loopCMDSecond = lastValue;
     higherCMD = [0x82] + macaddress + Command.higherCMD;
@@ -519,7 +525,7 @@ class _ChatPage extends State<ChatPage> {
       0x0A
     ]);
 
-    await Future.delayed(const Duration(seconds: 4), () {
+    await Future.delayed(const Duration(seconds: 5), () {
       macadd2 = getAddressData(addressCMD2);
       addressCMDFlag2 = false;
     });
@@ -535,17 +541,17 @@ class _ChatPage extends State<ChatPage> {
 
     await _sendMessagee(manufacturerCMDTemp);
 
-    await Future.delayed(const Duration(milliseconds: 1500), () {
+    await Future.delayed(const Duration(seconds: 4), () {
       sendinitialCmdd();
     });
 
-    await Future.delayed(const Duration(milliseconds: 1500), () {
+    await Future.delayed(const Duration(seconds: 4), () {
       sendlcluclCmdd();
     });
     setManuName();
     setTagName();
 
-    await Future.delayed(const Duration(milliseconds: 1500), () {
+    await Future.delayed(const Duration(seconds: 4), () {
       ucllclFlag = false;
       stopFlag = false;
       screenLoaded = true;
@@ -555,12 +561,12 @@ class _ChatPage extends State<ChatPage> {
   }
 
   Future<void> sendlcluclCmdd() async {
-   // await Future.delayed(const Duration(seconds: 2), () {});
+    await Future.delayed(const Duration(seconds: 2), () {});
     await _sendMessagee(upperlimitlowerTagCMDTemp);
   }
 
   Future<void> sendinitialCmdd() async {
-   // await Future.delayed(const Duration(seconds: 2), () {});
+    await Future.delayed(const Duration(seconds: 2), () {});
 
     await _sendMessagee(despritionTagCMDTemp);
   }
@@ -1106,7 +1112,7 @@ class _ChatPage extends State<ChatPage> {
                                                                                         Navigator.of(context).pop();
                                                                                       });
                                                                                     },
-                                                                                    child: Text('Set Lower & Upper Range')),
+                                                                                    child: Text('SET Lower & Upper Range')),
                                                                               ],
                                                                             ),
                                                                             setUcltestFlag && isValidUCLLCL
@@ -1263,9 +1269,6 @@ class _ChatPage extends State<ChatPage> {
                                                           .spaceBetween,
                                                   children: [
                                                     Container(),
-                                                     ElevatedButton(onPressed: (){
-                                              Navigator.of(context).pop();
-                                            }, child: Text('Cancel')),
                                                     ElevatedButton(
                                                         onPressed: () async {
                                                           setStateModal(() {
@@ -1274,7 +1277,7 @@ class _ChatPage extends State<ChatPage> {
                                                           _submitForm2();
                                                           Future.delayed(
                                                               const Duration(
-                                                                  milliseconds: 3500),
+                                                                  seconds: 4),
                                                               () async {
                                                             setStateModal(() {
                                                               looptestFlag =
@@ -1290,7 +1293,6 @@ class _ChatPage extends State<ChatPage> {
                                                         },
                                                         child:
                                                             Text('Loop Test')),
-                                                            
                                                   ],
                                                 ),
                                                 looptestFlag && isValidLoop
@@ -1334,7 +1336,6 @@ class _ChatPage extends State<ChatPage> {
                                               ],
                                             ),
                                           ),
-                                        
                                         );
                                       }));
                             },
@@ -1360,7 +1361,7 @@ class _ChatPage extends State<ChatPage> {
                             ),
                             onTap: () async {
                               fetchTag();
-                              await Future.delayed(const Duration(milliseconds: 3500),
+                              await Future.delayed(const Duration(seconds: 4),
                                   () {
                                 fetchlcl();
                               });
@@ -1555,7 +1556,7 @@ class _ChatPage extends State<ChatPage> {
     var minute = DateTime.now().minute;
     var second = DateTime.now().second;
     String fileName =
-        "HART_Report${day}_${month}_${hour}_${minute}_${second}.pdf";
+        "Report_Date${day}_${month}_${hour}_${minute}_${second}.pdf";
     saveAndLaunchFile(bytes, fileName);
   }
 
@@ -1754,6 +1755,23 @@ class _ChatPage extends State<ChatPage> {
       tagFinalCmd = [];
       temptagCode = [];
     } else {}
+  
+    if (isValid) {
+      _formKey.currentState!.save();
+      tempunitCode = codeConversation(check1);
+      var unitFinalCmdTEMP = unitCMDFirst + tempunitCode + tagCMDSecond;
+      var unitFinalCmdCheckSUM = getCheckSum(unitFinalCmdTEMP);
+      unitFinalCmd =
+          preamble + unitFinalCmdTEMP + unitFinalCmdCheckSUM + lastValue;
+
+      setState(() {
+        unitFinalCmd = unitFinalCmd;
+      });
+      _sendMessagee(unitFinalCmd);
+
+      unitFinalCmd = [];
+      tempunitCode = [];
+    } else {}
   }
 
   void _submitForm2() async {
@@ -1791,6 +1809,19 @@ class _ChatPage extends State<ChatPage> {
       print(lclinput);
       print(_lclValue);
       print("&&&&&&&&&&&&&&&&&&&&&");
+
+       var unitFinalCmdTEMP = unitCMDFirst + tempunitCode + unitCMDSecond;
+      var unitFinalCmdCheckSUM = getCheckSum(unitFinalCmdTEMP);
+      unitFinalCmd =
+          preamble + unitFinalCmdTEMP + unitinput + unitFinalCmdCheckSUM ;
+
+      setState(() {
+        unitFinalCmd = unitFinalCmd;
+      });
+      _sendMessagee(unitFinalCmd);
+
+      unitFinalCmd = [];
+      tempunitCode = [];
       var cmdforlcluclTEMP =
           lcluclCmd1 + unitinput + uclinput + lclinput; //+ lcluclCmd2;
       List<int> checkSum = getCheckSum(cmdforlcluclTEMP);
@@ -1895,7 +1926,7 @@ class _ChatPage extends State<ChatPage> {
                 child: Column(
                   children: [
                     CircularProgressIndicator(),
-                    Text('Initializing Dashboard')
+                    Text('Loading Dashboard')
                   ],
                 ),
               ));
@@ -2350,7 +2381,7 @@ class _ChatPage extends State<ChatPage> {
               builder: (ctx) => AlertDialog(
                 title: Text("Action needed"),
                 content:
-                    Text("Field device output 4ma equal to reference meter?"),
+                    Text("Feild device output 4ma equal to reference meter?"),
                 actions: <Widget>[
                   ElevatedButton(
                     onPressed: () {
@@ -2445,7 +2476,7 @@ class _ChatPage extends State<ChatPage> {
               builder: (ctx) => AlertDialog(
                 title: Text("Action needed"),
                 content:
-                    Text("Field device output 20ma equal to reference meter?"),
+                    Text("Feild device output 20ma equal to reference meter?"),
                 actions: <Widget>[
                   ElevatedButton(
                     onPressed: () {

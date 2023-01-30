@@ -227,7 +227,7 @@ class _MainPage extends State<MainPage> {
                           }),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 40,
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -263,16 +263,16 @@ class _MainPage extends State<MainPage> {
                       child: AvatarGlow(
                         startDelay: Duration(seconds: 1),
                         glowColor: Colors.red,
-                        endRadius: 150.0,
+                        endRadius: 140.0,
                         duration: Duration(milliseconds: 2000),
                         repeat: true,
                         showTwoGlows: true,
                         repeatPauseDuration: Duration(milliseconds: 100),
                         child: Container(
                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          height: 150,
+                          height: 140,
                           // alignment: AlignmentGeometry.lerp(0, , t),
-                          width: 150,
+                          width: 140,
                           decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(750)),

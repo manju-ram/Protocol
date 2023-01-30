@@ -12,7 +12,7 @@ class Nolicense extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Hi This is an Industrail Standard App to Communicate and Control HART device.',
+              'Hi,\nThis is an Industrial Standard App to Communicate and Control HART device.',
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
@@ -25,7 +25,7 @@ class Nolicense extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             Text(
-              " XXXXX54321",
+              "XXXXX54321",
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
